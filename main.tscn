@@ -1,0 +1,75 @@
+[gd_scene load_steps=5 format=3 uid="uid://c5a5b0fqeamrt"]
+
+[ext_resource type="Script" uid="uid://cyuou1tx8jt26" path="res://main.gd" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://1721vtlhxycr" path="res://Level1.tscn" id="2_1bvp3"]
+[ext_resource type="Script" uid="uid://r3dea56q7b15" path="res://ServerManager.gd" id="2_h2yge"]
+[ext_resource type="PackedScene" uid="uid://cdlbvn8lfxwhw" path="res://Player.tscn" id="3_1bvp3"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_ig7tw")
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.117647, 0.117647, 0.117647, 0.647059)
+
+[node name="BoxContainer" type="BoxContainer" parent="UI"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -66.5
+offset_top = -50.5
+offset_right = 66.5
+offset_bottom = 50.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/BoxContainer"]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="UI/BoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "127.0.0.1"
+
+[node name="host" type="Button" parent="UI/BoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Crear Partida"
+
+[node name="join" type="Button" parent="UI/BoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Unirse a Partida"
+
+[node name="Room" type="Node" parent="."]
+
+[node name="Node2D" parent="Room" instance=ExtResource("2_1bvp3")]
+visible = false
+
+[node name="ServerManager" type="Node" parent="." node_paths=PackedStringArray("main_scene")]
+script = ExtResource("2_h2yge")
+Player = ExtResource("3_1bvp3")
+main_scene = NodePath("../Room")
+port = "3050"
+max_clients = 10
+metadata/_custom_type_script = "uid://r3dea56q7b15"
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("uid://cdlbvn8lfxwhw")
+spawn_path = NodePath("../Room")
+
+[connection signal="pressed" from="UI/BoxContainer/VBoxContainer/host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="UI/BoxContainer/VBoxContainer/join" to="." method="_on_join_pressed"]
